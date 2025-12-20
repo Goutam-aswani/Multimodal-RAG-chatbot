@@ -1,885 +1,444 @@
-# 🔍 Multimodal RAG Chatbot# 🔍 Multimodal RAG Chatbot# Multimodal RAG Chatbot
+# 🔍 Multimodal RAG Chatbot# Multimodal RAG Chatbot
 
 
 
-A production-ready **Retrieval-Augmented Generation (RAG)** chatbot that processes multimodal documents (PDFs with text, images, and tables) and answers questions using Google's Gemini LLM.
+A production-ready **Retrieval-Augmented Generation (RAG)** chatbot that processes multimodal documents (PDFs with text, images, and tables) and answers questions using Google's Gemini LLM.A Streamlit-based multimodal RAG (Retrieval-Augmented Generation) chatbot that can process PDFs, images, and text files.
 
 
 
----A production-ready **Retrieval-Augmented Generation (RAG)** chatbot that processes multimodal documents (PDFs with text, images, and tables) and answers questions using Google's Gemini LLM.A Streamlit-based multimodal RAG (Retrieval-Augmented Generation) chatbot that can process PDFs, images, and text files.
+---## Features
 
 
 
-## 📋 Table of Contents
+## 📋 Table of Contents- **Document Processing**: Load PDFs, images, and text files with OCR support
 
+- **Hybrid Search**: Combines FAISS vector search with BM25 keyword search
 
-
-- [Features](#-features)---## Features
-
-- [Architecture](#-architecture)
-
-- [Technology Stack](#-technology-stack)
-
-- [Installation](#-installation)
-
-- [Configuration](#-configuration)## 📋 Table of Contents- **Document Processing**: Load PDFs, images, and text files with OCR support
-
-- [Usage](#-usage)
-
-- [Project Structure](#-project-structure)- **Hybrid Search**: Combines FAISS vector search with BM25 keyword search
-
-- [How It Works](#-how-it-works)
-
-- [API Reference](#-api-reference)- [Features](#-features)- **Reranking**: Cross-encoder reranking for improved relevance
-
-- [Troubleshooting](#-troubleshooting)
+- [Features](#-features)- **Reranking**: Cross-encoder reranking for improved relevance
 
 - [Architecture](#-architecture)- **Streaming Responses**: Real-time LLM response streaming
 
----
-
 - [Technology Stack](#-technology-stack)- **Citation Tracking**: Source attribution for all responses
-
-## ✨ Features
 
 - [Installation](#-installation)
 
-### Core Capabilities
-
 - [Configuration](#-configuration)## Setup
 
-| Feature | Description |
+- [Usage](#-usage)
 
-|---------|-------------|- [Usage](#-usage)
+- [Project Structure](#-project-structure)1. Install dependencies:
 
-| 📄 **Multimodal Document Processing** | Extract text, images, and tables from PDFs |
+- [How It Works](#-how-it-works)```bash
 
-| 🖼️ **True Multimodal Embeddings** | CLIP model embeds both text AND images in unified vector space |- [Project Structure](#-project-structure)1. Install dependencies:
+- [API Reference](#-api-reference)pip install -r requirements.txt
 
-| 🔎 **Hybrid Retrieval** | Combines semantic search (FAISS) with keyword search (BM25) |
-
-| 🎯 **Cross-Encoder Reranking** | Re-scores results for higher precision |- [How It Works](#-how-it-works)```bash
-
-| 💬 **Conversational Memory** | Remembers context across multiple turns |
-
-| 🔄 **Query Reformulation** | Automatically makes follow-up questions standalone |- [API Reference](#-api-reference)pip install -r requirements.txt
-
-| 📊 **Table Extraction** | Converts PDF tables to searchable markdown |
-
-| 👁️ **OCR Support** | Extracts text from images using EasyOCR |- [Troubleshooting](#-troubleshooting)```
+- [Troubleshooting](#-troubleshooting)```
 
 
 
-### User Interface
-
-
-
-| Feature | Description |---2. Configure environment variables in `.env`:
-
-|---------|-------------|
-
-| 💻 **Streamlit Chat Interface** | Modern, responsive design |```
-
-| 📁 **File Upload** | Drag-and-drop PDF, image, and text files |
-
-| 📚 **Source Citations** | See exactly where answers come from |## ✨ FeaturesGOOGLE_API_KEY=your-google-api-key
-
-| ⚡ **Streaming Responses** | Real-time token-by-token output |
+---2. Configure environment variables in `.env`:
 
 ```
 
----
+## ✨ FeaturesGOOGLE_API_KEY=your-google-api-key
+
+```
 
 ### Core Capabilities
-
-## 🏗️ Architecture
 
 3. Run the app:
 
-### High-Level System Overview
-
 | Feature | Description |```bash
 
-```
+|---------|-------------|streamlit run app.py
 
-┌─────────────────────────────────────────────────────────────┐|---------|-------------|streamlit run app.py
+| 📄 **Multimodal Document Processing** | Extract text, images, and tables from PDFs |```
 
-│                    Streamlit Web Interface                  │
+| 🖼️ **True Multimodal Embeddings** | CLIP model embeds both text AND images in unified vector space |
 
-│  (Chat, File Upload, Source Display, Settings)              │| 📄 **Multimodal Document Processing** | Extract text, images, and tables from PDFs |```
+| 🔎 **Hybrid Retrieval** | Combines semantic search (FAISS) with keyword search (BM25) |## Project Structure
 
-└────────────────────────────┬────────────────────────────────┘
+| 🎯 **Cross-Encoder Reranking** | Re-scores results for higher precision |
 
-                             │| 🖼️ **True Multimodal Embeddings** | CLIP model embeds both text AND images in unified vector space |
+| 💬 **Conversational Memory** | Remembers context across multiple turns |```
 
-        ┌────────────────────┼────────────────────┐
+| 🔄 **Query Reformulation** | Automatically makes follow-up questions standalone |multimodal_rag_chatbot/
 
-        │                    │                    │| 🔎 **Hybrid Retrieval** | Combines semantic search (FAISS) with keyword search (BM25) |## Project Structure
+| 📊 **Table Extraction** | Converts PDF tables to searchable markdown |├── app.py                    # Main Streamlit app
 
-        ▼                    ▼                    ▼
+| 👁️ **OCR Support** | Extracts text from images using EasyOCR |├── config.py                 # Settings & API keys
 
-┌──────────────┐    ┌────────────────┐   ┌──────────────┐| 🎯 **Cross-Encoder Reranking** | Re-scores results for higher precision |
+├── core/                     # Core processing modules
 
-│   Document   │    │   RAG Pipeline │   │ Conversation │
-
-│  Processor   │    │  & Retrieval   │   │    Memory    │| 💬 **Conversational Memory** | Remembers context across multiple turns |```
-
-│ (PDF, IMG)   │    │   (FAISS+BM25) │   │ (Context)    │
-
-└──────────────┘    └────────────────┘   └──────────────┘| 🔄 **Query Reformulation** | Automatically makes follow-up questions standalone |multimodal_rag_chatbot/
-
-        │                    │                    │
-
-        └────────────────────┼────────────────────┘| 📊 **Table Extraction** | Converts PDF tables to searchable markdown |├── app.py                    # Main Streamlit app
-
-                             │
-
-                    ┌────────▼────────┐| 👁️ **OCR Support** | Extracts text from images using EasyOCR |├── config.py                 # Settings & API keys
-
-                    │  LLM Service    │
-
-                    │  (Gemini API)   │├── core/                     # Core processing modules
-
-                    │  (Streaming)    │
-
-                    └─────────────────┘### User Interface│   ├── document_processor.py # Document loading & chunking
-
-```
+### User Interface│   ├── document_processor.py # Document loading & chunking
 
 │   ├── embedding_engine.py   # CLIP embeddings + FAISS
 
-### Data Flow
-
 | Feature | Description |│   └── retrieval_engine.py   # Hybrid search & reranking
 
-```
+|---------|-------------|├── services/                 # Business logic
 
-1. Document Upload|---------|-------------|├── services/                 # Business logic
+| 💻 **Streamlit Chat Interface** | Modern, responsive design |│   ├── llm_service.py        # LLM generation
 
-   ↓
+| 📁 **File Upload** | Drag-and-drop PDF, image, and text files |│   └── rag_pipeline.py       # End-to-end orchestration
 
-2. Text Extraction (PyMuPDF) + OCR (EasyOCR) + Table Extraction| 💻 **Streamlit Chat Interface** | Modern, responsive design |│   ├── llm_service.py        # LLM generation
+| 📚 **Source Citations** | See exactly where answers come from |├── components/               # Streamlit UI components
 
-   ↓
+| ⚡ **Streaming Responses** | Real-time token-by-token output |│   ├── sidebar.py            # File upload sidebar
 
-3. Chunking (RecursiveCharacterTextSplitter: 1000 chars, 200 overlap)| 📁 **File Upload** | Drag-and-drop PDF, image, and text files |│   └── rag_pipeline.py       # End-to-end orchestration
+│   ├── chat_interface.py     # Chat UI
 
-   ↓
+---│   └── document_viewer.py    # Source display
 
-4. Embedding (CLIP: sentence-transformers/clip-ViT-B-32)| 📚 **Source Citations** | See exactly where answers come from |├── components/               # Streamlit UI components
+├── data/                     # Data storage
 
-   ├─ Text embeddings (512-dim)
+## 🏗️ Architecture│   ├── uploads/              # Uploaded documents
 
-   └─ Image embeddings (512-dim, same space)| ⚡ **Streaming Responses** | Real-time token-by-token output |│   ├── sidebar.py            # File upload sidebar
+│   ├── faiss_index/          # Vector store
 
-   ↓
+### High-Level System Overview│   └── bm25_index/           # BM25 index
 
-5. Indexing│   ├── chat_interface.py     # Chat UI
+└── utils/                    # Utility functions
 
-   ├─ FAISS (semantic search via cosine similarity)
+```    └── helpers.py
 
-   └─ BM25 (keyword search)---│   └── document_viewer.py    # Source display
+┌─────────────────────────────────────────────────────────────────────┐```
 
-   ↓
-
-6. Query Processing├── data/                     # Data storage
-
-   ├─ Reformulate if follow-up (ConversationMemory)
-
-   ├─ Embed query with CLIP## 🏗️ Architecture│   ├── uploads/              # Uploaded documents
-
-   └─ Hybrid retrieval (RRF fusion)
-
-   ↓│   ├── faiss_index/          # Vector store
-
-7. Reranking (Cross-encoder: ms-marco-MiniLM-L-12-v2)
-
-   ↓### High-Level System Overview│   └── bm25_index/           # BM25 index
-
-8. Generation (Gemini with streaming)
-
-   ↓└── utils/                    # Utility functions
-
-9. Display with source citations
-
-``````    └── helpers.py
-
-
-
----┌─────────────────────────────────────────────────────────────────────┐```
-
-
-
-## 💻 Technology Stack│                         USER INTERFACE                               │
-
+│                         USER INTERFACE                               │
 │                      (Streamlit Chat App)                            │
-
-| Component | Technology |└─────────────────────────────────────────────────────────────────────┘
-
-|-----------|-----------|                                    │
-
-| **LLM** | Google Gemini API |                                    ▼
-
-| **Embeddings** | CLIP (sentence-transformers) |┌─────────────────────────────────────────────────────────────────────┐
-
-| **Vector DB** | FAISS (IndexFlatIP) |│                         RAG PIPELINE                                 │
-
-| **Keyword Search** | BM25 (rank-bm25) |│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐ │
-
-| **Reranking** | Cross-Encoder (sentence-transformers) |│  │   Query     │  │   Hybrid    │  │  Reranker   │  │    LLM      │ │
-
-| **PDF Processing** | PyMuPDF (fitz) |│  │Reformulation│→ │  Retrieval  │→ │ (Cross-Enc) │→ │  (Gemini)   │ │
-
-| **OCR** | EasyOCR |│  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘ │
-
-| **UI Framework** | Streamlit |└─────────────────────────────────────────────────────────────────────┘
-
-| **LLM Integration** | LangChain (langchain-google-genai) |                                    │
-
-| **Text Splitting** | LangChain TextSplitters |                    ┌───────────────┴───────────────┐
-
-| **Python Version** | 3.8+ |                    ▼                               ▼
-
+└─────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                         RAG PIPELINE                                 │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐ │
+│  │   Query     │  │   Hybrid    │  │  Reranker   │  │    LLM      │ │
+│  │Reformulation│→ │  Retrieval  │→ │ (Cross-Enc) │→ │  (Gemini)   │ │
+│  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘ │
+└─────────────────────────────────────────────────────────────────────┘
+                                    │
+                    ┌───────────────┴───────────────┐
+                    ▼                               ▼
         ┌───────────────────┐           ┌───────────────────┐
-
----        │   FAISS Index     │           │   BM25 Index      │
-
+        │   FAISS Index     │           │   BM25 Index      │
         │ (Vector Search)   │           │ (Keyword Search)  │
-
-## 📦 Installation        └───────────────────┘           └───────────────────┘
-
+        └───────────────────┘           └───────────────────┘
                     │                               │
-
-### Prerequisites                    └───────────────┬───────────────┘
-
-- Python 3.8 or higher                                    ▼
-
-- Google API key (free at [ai.google.dev](https://ai.google.dev))┌─────────────────────────────────────────────────────────────────────┐
-
+                    └───────────────┬───────────────┘
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────┐
 │                    DOCUMENT PROCESSING                               │
-
-### Steps│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐ │
-
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐ │
 │  │    Text     │  │   Images    │  │   Tables    │  │    OCR      │ │
-
-1. **Clone the repository**│  │  Extraction │  │  (+ CLIP)   │  │ (Markdown)  │  │  (EasyOCR)  │ │
-
-```bash│  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘ │
-
-git clone https://github.com/Goutam-aswani/Multimodal-RAG-chatbot.git└─────────────────────────────────────────────────────────────────────┘
-
-cd Multimodal-RAG-chatbot```
-
+│  │  Extraction │  │  (+ CLIP)   │  │ (Markdown)  │  │  (EasyOCR)  │ │
+│  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘ │
+└─────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Multimodal Embedding Architecture
 
-2. **Create virtual environment**
-
-```bash```
-
-python -m venv venv                    ┌─────────────────────────────────────┐
-
-source venv/bin/activate  # On Windows: venv\Scripts\activate                    │         CLIP Model (ViT-B-32)       │
-
-```                    │   Shared Text-Image Embedding Space  │
-
-                    └─────────────────────────────────────┘
-
-3. **Install dependencies**                                      │
-
-```bash                    ┌─────────────────┼─────────────────┐
-
-pip install -r requirements.txt                    │                 │                 │
-
-```                    ▼                 ▼                 ▼
-
-            ┌─────────────┐   ┌─────────────┐   ┌─────────────┐
-
-4. **Create `.env` file**            │    Text     │   │   Images    │   │   Tables    │
-
-```bash            │  Encoder    │   │  Encoder    │   │ (as Text)   │
-
-echo "GOOGLE_API_KEY=your_api_key_here" > .env            └─────────────┘   └─────────────┘   └─────────────┘
-
-```                    │                 │                 │
-
-                    ▼                 ▼                 ▼
-
-5. **Run the app**            [512-dim vector]  [512-dim vector]  [512-dim vector]
-
-```bash                    │                 │                 │
-
-streamlit run app.py                    └─────────────────┼─────────────────┘
-
-```                                      ▼
-
+```
                     ┌─────────────────────────────────────┐
-
-The app will open at `http://localhost:8501`                    │        Unified FAISS Index          │
-
+                    │         CLIP Model (ViT-B-32)       │
+                    │   Shared Text-Image Embedding Space  │
+                    └─────────────────────────────────────┘
+                                      │
+                    ┌─────────────────┼─────────────────┐
+                    │                 │                 │
+                    ▼                 ▼                 ▼
+            ┌─────────────┐   ┌─────────────┐   ┌─────────────┐
+            │    Text     │   │   Images    │   │   Tables    │
+            │  Encoder    │   │  Encoder    │   │ (as Text)   │
+            └─────────────┘   └─────────────┘   └─────────────┘
+                    │                 │                 │
+                    ▼                 ▼                 ▼
+            [512-dim vector]  [512-dim vector]  [512-dim vector]
+                    │                 │                 │
+                    └─────────────────┼─────────────────┘
+                                      ▼
+                    ┌─────────────────────────────────────┐
+                    │        Unified FAISS Index          │
                     │  (Text + Images in same space)      │
-
----                    └─────────────────────────────────────┘
-
+                    └─────────────────────────────────────┘
 ```
 
-## ⚙️ Configuration
-
 ---
-
-### Environment Variables (`.env`)
 
 ## 🛠️ Technology Stack
 
-```env
-
-# Required| Component | Technology | Purpose |
-
-GOOGLE_API_KEY=your-gemini-api-key|-----------|------------|---------|
-
+| Component | Technology | Purpose |
+|-----------|------------|---------|
 | **Document Processing** | PyMuPDF (fitz) | PDF text, image, table extraction |
-
-# Optional| **OCR** | EasyOCR | Extract text from images |
-
-CHUNK_SIZE=1000              # Text chunk size| **Embeddings** | CLIP (ViT-B-32) | Multimodal text & image embeddings |
-
-CHUNK_OVERLAP=200            # Chunk overlap| **Vector Store** | FAISS | Fast similarity search |
-
-MAX_MEMORY_TURNS=5           # Conversation history turns| **Keyword Search** | BM25 (rank-bm25) | Lexical matching |
-
-TOP_K_RETRIEVAL=10           # Top K results to retrieve| **Reranking** | Cross-Encoder | Precision improvement |
-
-RERANK_TOP_K=5               # Top K results after reranking| **LLM** | Google Gemini | Response generation |
-
-```| **UI Framework** | Streamlit | Web interface |
-
+| **OCR** | EasyOCR | Extract text from images |
+| **Embeddings** | CLIP (ViT-B-32) | Multimodal text & image embeddings |
+| **Vector Store** | FAISS | Fast similarity search |
+| **Keyword Search** | BM25 (rank-bm25) | Lexical matching |
+| **Reranking** | Cross-Encoder | Precision improvement |
+| **LLM** | Google Gemini | Response generation |
+| **UI Framework** | Streamlit | Web interface |
 | **Configuration** | Pydantic Settings | Type-safe config |
-
-### Supported File Types
 
 ---
 
-| Type | Extensions | Processing |
+## 📦 Installation
 
-|------|-----------|-----------|## 📦 Installation
-
-| **PDF** | `.pdf` | Text, images, tables |
-
-| **Images** | `.jpg`, `.png`, `.jpeg` | OCR + CLIP embedding |### Prerequisites
-
-| **Text** | `.txt`, `.md` | Direct text processing |
+### Prerequisites
 
 - Python 3.9 or higher
-
----- Google API Key (for Gemini LLM)
-
+- Google API Key (for Gemini LLM)
 - 4GB+ RAM recommended
-
-## 🚀 Usage
 
 ### Step 1: Clone the Repository
 
-### Quick Start
-
 ```bash
-
-1. **Upload documents** - Click "Upload Documents" in the sidebargit clone <repository-url>
-
-2. **Process** - Click "Process Documents" buttoncd multimodal_rag_chatbot
-
-3. **Ask questions** - Type in the chat input```
-
-4. **View sources** - Expand "View Sources" for context
+git clone <repository-url>
+cd multimodal_rag_chatbot
+```
 
 ### Step 2: Create Virtual Environment
 
-### Example Queries
+```bash
+# Create virtual environment
+python -m venv venv
+
+# Activate (Windows)
+venv\Scripts\activate
+
+# Activate (Linux/Mac)
+source venv/bin/activate
+```
+
+### Step 3: Install Dependencies
 
 ```bash
+pip install -r requirements.txt
+```
 
-- "What is the main topic of this document?"# Create virtual environment
+### Step 4: Configure Environment
 
-- "Summarize the key points"python -m venv venv
+Create a `.env` file in the project root:
 
-- "What does the image show?"
+```env
+# Required
+GOOGLE_API_KEY=your_google_api_key_here
 
-- "Can you explain the table?"# Activate (Windows)
+# Optional (has defaults)
+DEFAULT_MODEL=gemini-2.0-flash
+```
 
-- "Follow-up: Tell me more about..." (uses conversation memory)venv\Scripts\activate
+### Step 5: Run the Application
 
+```bash
+streamlit run app.py
+```
 
+The app will open at `http://localhost:8501`
 
----# Activate (Linux/Mac)
+---
 
-source venv/bin/activate
+## ⚙️ Configuration
 
-## 📁 Project Structure```
+### Environment Variables
 
-
-
-```### Step 3: Install Dependencies
-
-multimodal_rag_chatbot/
-
-├── app.py                      # Main Streamlit app```bash
-
-├── config.py                   # Settings & configurationpip install -r requirements.txt
-
-├── requirements.txt            # Python dependencies```
-
-├── .env                        # Environment variables
-
-├── .gitignore                  # Git ignore file### Step 4: Configure Environment
-
-├── README.md                   # This file
-
-├── QUICKSTART.md               # Quick start guideCreate a `.env` file in the project root:
-
-│
-
-├── core/                       # Core processing modules```env
-
-│   ├── document_processor.py   # Document loading & chunking# Required
-
-│   ├── embedding_engine.py     # CLIP embeddings + FAISSGOOGLE_API_KEY=your_google_api_key_here
-
-│   └── retrieval_engine.py     # Hybrid search & reranking
-
-│# Optional (has defaults)
-
-├── services/                   # Business logicDEFAULT_MODEL=gemini-2.0-flash
-
-│   ├── llm_service.py         # LLM generation & memory```
-
-│   └── rag_pipeline.py        # End-to-end orchestration
-
-│### Step 5: Run the Application
-
-├── components/                 # Streamlit UI components
-
-│   ├── sidebar.py             # File upload sidebar```bash
-
-│   ├── chat_interface.py       # Chat UIstreamlit run app.py
-
-│   └── document_viewer.py      # Source display```
-
-│
-
-└── data/                       # Data storageThe app will open at `http://localhost:8501`
-
-    ├── uploads/               # Uploaded documents
-
-    ├── faiss_index/           # Vector store---
-
-    └── bm25_index/            # BM25 index
-
-```## ⚙️ Configuration
-
-
-
----### Environment Variables
-
-
-
-## 🔄 How It Works| Variable | Required | Default | Description |
-
+| Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
-
-### 1. Document Processing Pipeline| `GOOGLE_API_KEY` | ✅ Yes | - | Google AI API key for Gemini |
-
+| `GOOGLE_API_KEY` | ✅ Yes | - | Google AI API key for Gemini |
 | `DEFAULT_MODEL` | ❌ No | `gemini-2.0-flash` | LLM model to use |
 
-```python
-
-# Load document### Application Settings
-
-doc = process_pdf("document.pdf")
+### Application Settings
 
 The `config.py` file contains all configurable settings:
 
-# Extract: text, images (as base64), tables (as markdown)
-
-# Chunk: RecursiveCharacterTextSplitter (1000 chars, 200 overlap)```python
-
-# Store: Chunk dataclass with metadataclass Settings:
-
-```    # LLM Settings
-
+```python
+class Settings:
+    # LLM Settings
     google_api_key: str          # From .env
-
-### 2. Embedding & Indexing    default_model: str           # Gemini model name
-
+    default_model: str           # Gemini model name
     
-
-```python    # Retrieval Settings
-
-# CLIP embeddings (unified space)    top_k_retrieval: int = 10    # Candidates from hybrid search
-
-text_embedding = clip.embed_text(text)      # 512-dim vector    top_k_rerank: int = 3        # Final results after reranking
-
-image_embedding = clip.embed_image(image)   # 512-dim vector (same space!)    
-
+    # Retrieval Settings
+    top_k_retrieval: int = 10    # Candidates from hybrid search
+    top_k_rerank: int = 3        # Final results after reranking
+    
     # Storage Paths
-
-# Store in FAISS    upload_dir: str = "data/uploads"
-
-faiss_index.add(embeddings)  # Cosine similarity via L2 normalization    faiss_index_path: str = "data/faiss_index"
-
+    upload_dir: str = "data/uploads"
+    faiss_index_path: str = "data/faiss_index"
     bm25_index_path: str = "data/bm25_index"
+```
 
-# Store in BM25```
+---
 
-bm25_index.add_document(text)  # Keyword-based ranking
+## 🚀 Usage
 
-```---
+### Step 1: Upload Documents
 
-
-
-### 3. Retrieval## 🚀 Usage
-
-
-
-```python### Step 1: Upload Documents
-
-# Reformulate query if follow-up
-
-query = reformulate_query_if_needed(user_input, memory)1. Click the sidebar file uploader
-
+1. Click the sidebar file uploader
 2. Select PDF, PNG, JPG, or TXT files (multiple files supported)
-
-# Hybrid retrieval3. Click **"Process Documents"**
-
-faiss_results = faiss_index.search(query_embedding, top_k=10)4. Wait for indexing to complete (progress shown)
-
-bm25_results = bm25_index.search(query, top_k=10)
+3. Click **"Process Documents"**
+4. Wait for indexing to complete (progress shown)
 
 ### Step 2: Ask Questions
 
-# Fuse with RRF (Reciprocal Rank Fusion)
-
-final_results = rrf_fusion(faiss_results, bm25_results)Type your question in the chat input:
-
-
-
-# Rerank with cross-encoder```
-
-reranked = reranker.rank(final_results, top_k=5)"What are the main points in this document?"
-
-```"Summarize the table on page 3"
-
-"What does the diagram show?"
-
-### 4. Generation"Explain the methodology section"
+Type your question in the chat input:
 
 ```
+"What are the main points in this document?"
+"Summarize the table on page 3"
+"What does the diagram show?"
+"Explain the methodology section"
+```
 
-```python
-
-# Build context from retrieved chunks### Step 3: View Sources
-
-context = "\n".join([chunk.text for chunk in reranked])
+### Step 3: View Sources
 
 After each response, expand **"📚 Sources"** to see:
-
-# Generate with Gemini (streaming)- Source file name
-
-response = gemini.generate(context, user_query, memory)- Page number
-
+- Source file name
+- Page number
 - Relevant excerpt
 
-# Update memory
-
-memory.add_turn(user_query, response)### Step 4: Conversation Features
-
-```
+### Step 4: Conversation Features
 
 | Action | How To |
-
----|--------|--------|
-
+|--------|--------|
 | **Follow-up Questions** | Just ask "Tell me more" or "Explain that further" |
-
-## 📚 API Reference| **Context Awareness** | System remembers last 5 conversation turns |
-
+| **Context Awareness** | System remembers last 5 conversation turns |
 | **New Chat** | Click "New Chat" to clear conversation history |
+| **Clear All** | Click "Clear All" to reset documents and indices |
 
-### Core Modules| **Clear All** | Click "Clear All" to reset documents and indices |
+---
 
-
-
-#### `document_processor.py`---
-
-
-
-```python## 📁 Project Structure
-
-from core.document_processor import process_pdf, process_image
+## 📁 Project Structure
 
 ```
-
-# Process PDFmultimodal_rag_chatbot/
-
-chunks = process_pdf("document.pdf")│
-
-# Returns: List[Chunk] with text, images (base64), metadata├── app.py                      # 🚀 Streamlit entry point
-
+multimodal_rag_chatbot/
+│
+├── app.py                      # 🚀 Streamlit entry point
 ├── config.py                   # ⚙️ Configuration settings
-
-# Process Image├── requirements.txt            # 📦 Python dependencies
-
-chunks = process_image("image.png")├── .env                        # 🔐 Environment variables (create this)
-
-# Returns: List[Chunk] with image data and metadata├── README.md                   # 📖 This documentation
-
-```│
-
+├── requirements.txt            # 📦 Python dependencies
+├── .env                        # 🔐 Environment variables (create this)
+├── README.md                   # 📖 This documentation
+│
 ├── core/                       # 🧠 Core processing modules
-
-#### `embedding_engine.py`│   ├── __init__.py
-
-│   ├── document_processor.py   # PDF/image/text extraction, chunking
-
-```python│   ├── embedding_engine.py     # CLIP embeddings, FAISS index
-
-from core.embedding_engine import EmbeddingEngine│   └── retrieval_engine.py     # BM25, hybrid retrieval, reranking
-
-│
-
-engine = EmbeddingEngine(model_name="sentence-transformers/clip-ViT-B-32")├── services/                   # 🔧 Business logic layer
-
 │   ├── __init__.py
-
-# Embed text│   ├── llm_service.py          # Gemini integration, memory, prompts
-
-embedding = engine.embed_text("Hello world")  # 512-dim vector│   └── rag_pipeline.py         # Main RAG orchestration
-
+│   ├── document_processor.py   # PDF/image/text extraction, chunking
+│   ├── embedding_engine.py     # CLIP embeddings, FAISS index
+│   └── retrieval_engine.py     # BM25, hybrid retrieval, reranking
 │
-
-# Embed image├── components/                 # 🎨 UI components
-
-embedding = engine.embed_image(image_bytes)   # 512-dim vector (same space)│   ├── __init__.py
-
+├── services/                   # 🔧 Business logic layer
+│   ├── __init__.py
+│   ├── llm_service.py          # Gemini integration, memory, prompts
+│   └── rag_pipeline.py         # Main RAG orchestration
+│
+├── components/                 # 🎨 UI components
+│   ├── __init__.py
 │   ├── sidebar.py              # File upload, controls
-
-# Add chunks to FAISS│   ├── chat_interface.py       # Chat messages display
-
-engine.faiss_index.add_chunks(chunks)│   └── document_viewer.py      # Source citations display
-
-```│
-
+│   ├── chat_interface.py       # Chat messages display
+│   └── document_viewer.py      # Source citations display
+│
 ├── utils/                      # 🛠️ Utility functions
-
-#### `retrieval_engine.py`│   ├── __init__.py
-
+│   ├── __init__.py
 │   └── helpers.py              # Helper functions
-
-```python│
-
-from core.retrieval_engine import HybridRetriever└── data/                       # 💾 Data storage (auto-created)
-
+│
+└── data/                       # 💾 Data storage (auto-created)
     ├── uploads/                # Uploaded files
-
-retriever = HybridRetriever(faiss_index, bm25_index, reranker)    ├── faiss_index/            # Vector index persistence
-
+    ├── faiss_index/            # Vector index persistence
     └── bm25_index/             # Keyword index persistence
-
-# Retrieve relevant chunks```
-
-results = retriever.retrieve(query_embedding, query_text, top_k=5)
-
-# Returns: List[Chunk] ranked by relevance---
-
 ```
+
+---
 
 ## 🔄 How It Works
 
-#### `rag_pipeline.py`
-
 ### 1. Document Processing Pipeline
 
-```python
+When you upload a PDF, the system:
 
-from services.rag_pipeline import RAGPipelineWhen you upload a PDF, the system:
-
-
-
-pipeline = RAGPipeline()```
-
+```
 PDF Upload
-
-# Process documents    │
-
-pipeline.process_documents(file_paths)    ├──→ TEXT EXTRACTION (PyMuPDF)
-
-    │         │
-
-# Query with streaming    │         ▼
-
-for chunk in pipeline.query("What is this about?"):    │    Chunking (1000 chars, 200 overlap)
-
-    print(chunk, end="", flush=True)    │    Using RecursiveCharacterTextSplitter
-
-```    │         │
-
-    │         ▼
-
-#### `llm_service.py`    │    Text Chunks ──→ CLIP Text Encoder ──→ 512-dim Vectors
-
     │
-
-```python    ├──→ IMAGE EXTRACTION
-
-from services.llm_service import LLMService, ConversationMemory    │         │
-
+    ├──→ TEXT EXTRACTION (PyMuPDF)
+    │         │
+    │         ▼
+    │    Chunking (1000 chars, 200 overlap)
+    │    Using RecursiveCharacterTextSplitter
+    │         │
+    │         ▼
+    │    Text Chunks ──→ CLIP Text Encoder ──→ 512-dim Vectors
+    │
+    ├──→ IMAGE EXTRACTION
+    │         │
     │         ├──→ OCR (EasyOCR) ──→ Text content for display
-
-memory = ConversationMemory(max_turns=5)    │         │
-
-llm = LLMService()    │         └──→ Base64 encoding ──→ Stored in Chunk.image_data
-
+    │         │
+    │         └──→ Base64 encoding ──→ Stored in Chunk.image_data
     │                   │
-
-# Generate response    │                   ▼
-
-response = llm.generate_response(    │              CLIP Image Encoder ──→ 512-dim Vectors
-
-    context="...",    │
-
-    query="Question?",    └──→ TABLE EXTRACTION (PyMuPDF)
-
-    memory=memory,              │
-
-    stream=True              ▼
-
-)         Convert to Markdown ──→ CLIP Text Encoder ──→ 512-dim Vectors
-
-```              
-
+    │                   ▼
+    │              CLIP Image Encoder ──→ 512-dim Vectors
+    │
+    └──→ TABLE EXTRACTION (PyMuPDF)
               │
-
----              ▼
-
+              ▼
+         Convert to Markdown ──→ CLIP Text Encoder ──→ 512-dim Vectors
+              
+              │
+              ▼
     ┌─────────────────────────────────────┐
-
-## 🐛 Troubleshooting    │  Unified FAISS Index                │
-
+    │  Unified FAISS Index                │
     │  (All vectors in same semantic      │
-
-### Common Issues    │   space - text queries can find     │
-
+    │   space - text queries can find     │
     │   relevant images!)                 │
+    │                                     │
+    │  + BM25 Keyword Index               │
+    │  (For lexical matching)             │
+    └─────────────────────────────────────┘
+```
 
-| Problem | Solution |    │                                     │
+### 2. Query Processing Pipeline
 
-|---------|----------|    │  + BM25 Keyword Index               │
+When you ask a question:
 
-| **"API key not found"** | Check `.env` file exists and has correct `GOOGLE_API_KEY` |    │  (For lexical matching)             │
-
-| **"Module not found"** | Run `pip install -r requirements.txt` |    └─────────────────────────────────────┘
-
-| **Slow first run** | Models downloading (CLIP, cross-encoder) — one-time only |```
-
-| **Out of memory** | Reduce `CHUNK_SIZE` or `MAX_RETRIEVAL_RESULTS` in `config.py` |
-
-| **"FAISS index not found"** | Process documents first using the sidebar button |### 2. Query Processing Pipeline
-
-| **PDF not extracting text** | Check PDF is not scanned image; use OCR (auto-enabled for images) |
-
-| **Embedding dimension mismatch** | Ensure same CLIP model used for all embeddings |When you ask a question:
-
-
-
-### Debug Mode```
-
+```
 User Question: "What does the chart on page 5 show?"
-
-Enable debug logging in `config.py`:    │
-
-```python    ▼
-
-DEBUG = True┌─────────────────────────────────────────────────────────┐
-
-LOGGING_LEVEL = "DEBUG"│  1. QUERY REFORMULATION                                 │
-
-```│     ├─ Check conversation history                       │
-
+    │
+    ▼
+┌─────────────────────────────────────────────────────────┐
+│  1. QUERY REFORMULATION                                 │
+│     ├─ Check conversation history                       │
 │     ├─ If follow-up → make standalone using LLM         │
-
----│     └─ "that chart" → "the chart on page 5"             │
-
+│     └─ "that chart" → "the chart on page 5"             │
 └─────────────────────────────────────────────────────────┘
-
-## 📝 License    │
-
+    │
     ▼
-
-MIT License - see LICENSE file for details┌─────────────────────────────────────────────────────────┐
-
+┌─────────────────────────────────────────────────────────┐
 │  2. HYBRID SEARCH                                       │
-
----│     ├─ FAISS Semantic Search (60% weight)               │
-
+│     ├─ FAISS Semantic Search (60% weight)               │
 │     │   └─ Finds conceptually similar content           │
-
-## 🤝 Contributing│     ├─ BM25 Keyword Search (40% weight)                 │
-
+│     ├─ BM25 Keyword Search (40% weight)                 │
 │     │   └─ Finds exact term matches                     │
-
-Contributions welcome! Please:│     └─ RRF (Reciprocal Rank Fusion) combines results    │
-
+│     └─ RRF (Reciprocal Rank Fusion) combines results    │
 └─────────────────────────────────────────────────────────┘
-
-1. Fork the repository    │
-
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)    ▼
-
-3. Commit changes (`git commit -m 'Add amazing feature'`)┌─────────────────────────────────────────────────────────┐
-
-4. Push to branch (`git push origin feature/amazing-feature`)│  3. CROSS-ENCODER RERANKING                             │
-
-5. Open a Pull Request│     ├─ Take top 10 candidates                           │
-
-│     ├─ Score each (query, chunk) pair                   │
-
----│     └─ Return top 3 most relevant                       │
-
-└─────────────────────────────────────────────────────────┘
-
-## 👨‍💻 Author    │
-
+    │
     ▼
-
-**Goutam Aswani**┌─────────────────────────────────────────────────────────┐
-
+┌─────────────────────────────────────────────────────────┐
+│  3. CROSS-ENCODER RERANKING                             │
+│     ├─ Take top 10 candidates                           │
+│     ├─ Score each (query, chunk) pair                   │
+│     └─ Return top 3 most relevant                       │
+└─────────────────────────────────────────────────────────┘
+    │
+    ▼
+┌─────────────────────────────────────────────────────────┐
 │  4. PROMPT CONSTRUCTION                                 │
-
----│     ├─ System prompt with instructions                  │
-
+│     ├─ System prompt with instructions                  │
 │     ├─ Retrieved context with source markers            │
-
-## 🙏 Acknowledgments│     ├─ Conversation history (last 2 turns)              │
-
+│     ├─ Conversation history (last 2 turns)              │
 │     └─ User question                                    │
-
-- [Google Gemini API](https://ai.google.dev)└─────────────────────────────────────────────────────────┘
-
-- [CLIP (OpenAI)](https://github.com/openai/CLIP)    │
-
-- [FAISS (Meta)](https://github.com/facebookresearch/faiss)    ▼
-
-- [LangChain](https://langchain.com)┌─────────────────────────────────────────────────────────┐
-
-- [Streamlit](https://streamlit.io)│  5. LLM GENERATION (Gemini)                             │
-
+└─────────────────────────────────────────────────────────┘
+    │
+    ▼
+┌─────────────────────────────────────────────────────────┐
+│  5. LLM GENERATION (Gemini)                             │
 │     ├─ Stream response token by token                   │
-
----│     ├─ Include [Source X] citations                     │
-
+│     ├─ Include [Source X] citations                     │
 │     └─ Save to conversation memory                      │
-
-**Made with ❤️ for multimodal AI**└─────────────────────────────────────────────────────────┘
-
+└─────────────────────────────────────────────────────────┘
     │
     ▼
 Display in Chat UI with Expandable Sources
