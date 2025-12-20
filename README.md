@@ -34,7 +34,7 @@ A Streamlit-based multimodal RAG (Retrieval-Augmented Generation) chatbot that c
 | Feature | Description |
 |---------|-------------|
 | 📄 **Multimodal Document Processing** | Extract text, images, and tables from PDFs |
-| 🖼️ **True Multimodal Embeddings** | CLIP model embeds both text AND images in unified vector space |
+| 🖼️ **True Multimodal Embeddings** | CLIP model(by OpenAI) embeds both text AND images in unified vector space |
 | 🔎 **Hybrid Retrieval** | Combines semantic search (FAISS) with keyword search (BM25) |
 | 🎯 **Cross-Encoder Reranking** | Re-scores results for higher precision |
 | 💬 **Conversational Memory** | Remembers context across multiple turns |
