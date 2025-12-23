@@ -179,7 +179,7 @@ Create a `.env` file in the project root:
 GOOGLE_API_KEY=your_google_api_key_here
 
 # Optional (has defaults)
-DEFAULT_MODEL=gemini-2.0-flash
+DEFAULT_MODEL=gemini-2.5-flash
 ```
 
 ### Step 5: Run the Application
@@ -199,7 +199,7 @@ The app will open at `http://localhost:8501`
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `GOOGLE_API_KEY` | ✅ Yes | - | Google AI API key for Gemini |
-| `DEFAULT_MODEL` | ❌ No | `gemini-2.0-flash` | LLM model to use |
+| `DEFAULT_MODEL` | ❌ No | `gemini-2.5-flash` | LLM model to use |
 
 ### Application Settings
 
